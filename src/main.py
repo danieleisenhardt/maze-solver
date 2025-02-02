@@ -1,28 +1,25 @@
 from tkinter import Tk, BOTH, Canvas
-
-class Window:
-    def __init__(self, width, height):
-        self.__root = Tk()
-        self.__root.title("Maze Solver")
-        self.canvas = Canvas(self.__root, bg="White", height=height, width=width)
-        self.canvas.pack()
-        self.is_running = False
-        self.__root.protocol("WM_DELETE_WINDOW", self.close)
-    
-    def redraw(self):
-        self.__root.update_idletasks()
-        self.__root.update()
-
-    def wait_for_close(self):
-        self.is_running = True
-        while self.is_running:
-            self.redraw()
-
-    def close(self):
-        self.is_running = False
+from window import Window
+from line import Line
+from point import Point
+from cell import Cell
 
 def main():
     win = Window(800,600)
+
+    cell = Cell(win)
+    cell.has_top_wall = False
+    cell.draw(50, 50, 100, 100)
+
+    cell2 = Cell(win)
+    cell2.has_left_wall = False
+    cell2.has_right_wall = False
+    cell2.draw(150, 50, 200, 100)
+
+    cell3 = Cell(win)
+    cell3.has_bottom_wall = False
+    cell3.draw(250, 50, 300, 100)
+
     win.wait_for_close()
 
 main()
