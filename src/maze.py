@@ -58,30 +58,26 @@ class Maze:
         self.draw_cell(self._num_cols - 1, self._num_rows - 1)
     
     def _break_walls_r(self, i, j):
-        current = self._get_cell(i, j)
+        current = self._cells[i][j]
         current.visited = True
 
         while True:
             options = []
 
-            left = self._get_cell(i - 1, j)
-            if (left is not None and left.visited == False):
-                options.append([i -1, j])
-            right = self._get_cell(i + 1, j)
-            if (right is not None and right.visited == False):
-                options.append([i + 1, j])
-            top = self._get_cell(i, j - 1)
-            if (top is not None and top.visited == False):
-                options.append([i, j - 1])
-            bottom = self._get_cell(i, j + 1)
-            if (bottom is not None and bottom.visited == False):
-                options.append([i, j + 1])
+            if i > 0 and not self._cells[i -1][j].visited:
+                options.append((i - 1, j))
+            if i < self._num_cols - 1 and not self._cells[i +1][j].visited:
+                options.append((i + 1, j))
+            if j > 0 and not self._cells[i][j - 1].visited:
+                options.append((i, j - 1))
+            if j < self._num_rows - 1 and not self._cells[i][j + 1].visited:
+                options.append((i, j + 1))
             
             if len(options) == 0:
                 break
 
             next = options[random.randrange(len(options))]
-            next_cell = self._get_cell(next[0], next[1])
+            next_cell = self._cells[next[0]][next[1]]
             if (next[0] < i):
                 current.has_left_wall = False
                 next_cell.has_right_wall = False
@@ -99,9 +95,3 @@ class Maze:
             self.draw_cell(next[0], next[1])
 
             self._break_walls_r(next[0], next[1])
-
-    
-    def _get_cell(self, i, j):
-        if i < 0 or i >= self._num_cols or j < 0 or j >= self._num_rows:
-            return None
-        return self._cells[i][j]
